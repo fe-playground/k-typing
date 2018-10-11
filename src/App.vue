@@ -15,6 +15,7 @@
             :onStartTimer="startTimer"
             :onEndTimer="endTimer"
             :isLast="words.length === i + 1"
+            :clear="clear"
         />
       </div>
       <div class="box records">
@@ -47,6 +48,7 @@
         time: 0,
         t: null,
         records: [], // {name, time}
+        clear: true,
       };
     },
     methods: {
@@ -58,10 +60,12 @@
       },
       startTimer() {
         if (this.time) return;
+        this.clear = false;
         this.timer();
       },
       endTimer() {
         clearInterval(this.t);
+        this.clear = true;
         this.saveDataAndReset();
       },
       saveDataAndReset() {

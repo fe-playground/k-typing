@@ -21,6 +21,7 @@
       index: Number,
       isLast: Boolean,
       active: Boolean,
+      clear: Boolean,
       onSuccess: Function,
       onStartTimer: Function,
       onEndTimer: Function,
@@ -39,14 +40,13 @@
       }
     },
     updated() {
-      if (this.active) {
-        this.$refs.editorInput.focus();
-      }
+      this.active && this.$refs.editorInput.focus();
+      this.clear && (this.editor = null);
     },
     watch: {
       editor() {
-        if (this.index === 0) this.onStartTimer();
-      }
+        if (this.index === 0 && this.editor !== null) this.onStartTimer();
+      },
     }
   };
 </script>
