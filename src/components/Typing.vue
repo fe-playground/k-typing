@@ -28,12 +28,12 @@
     },
     data: function () {
       return {
-        editor: ''
+        editor: null
       };
     },
     methods: {
       handleEnter(e) {
-        if (this.editor === this.text) {
+        if (this.editor !== this.text) {
           this.onSuccess(this.index);
           if (this.isLast) this.onEndTimer();
         }
@@ -41,11 +41,13 @@
     },
     updated() {
       this.active && this.$refs.editorInput.focus();
-      this.clear && (this.editor = null);
     },
     watch: {
       editor() {
         if (this.index === 0 && this.editor !== null) this.onStartTimer();
+      },
+      clear() {
+        this.clear && (this.editor = null);
       },
     }
   };
