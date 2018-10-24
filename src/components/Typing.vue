@@ -5,7 +5,6 @@
         class="editor"
         type="text"
         v-model="editor"
-        @keydown.enter="handleEnter"
         :disabled="!active"
         ref="editorInput"
         :autofocus="active"
@@ -31,20 +30,16 @@
         editor: null
       };
     },
-    methods: {
-      handleEnter(e) {
-        if (this.editor !== this.text) {
-          this.onSuccess(this.index);
-          if (this.isLast) this.onEndTimer();
-        }
-      }
-    },
     updated() {
       this.active && this.$refs.editorInput.focus();
     },
     watch: {
       editor() {
         if (this.index === 0 && this.editor !== null) this.onStartTimer();
+        if (String(this.editor).trim() === this.text) {
+          this.onSuccess(this.index);
+          if (this.isLast) this.onEndTimer();
+        }
       },
       clear() {
         this.clear && (this.editor = null);

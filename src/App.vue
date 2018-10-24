@@ -2,6 +2,13 @@
   <div id="app">
     <div>
       <img alt="Vue logo" src="./assets/logo.png">
+      <div>
+        name:
+        <input
+          type="text"
+          v-model="name"
+        >
+      </div>
     </div>
     <div class="contents">
       <div class="box">
@@ -20,8 +27,8 @@
       </div>
       <div class="box records">
         <h2>Records</h2>
-        <div class="record" v-for="record in records">
-          {{JSON.stringify(record)}}
+        <div :class="`record ${record.current ? 'blue' : ''}`" v-for="(record, idx) in ranking()">
+          {{idx}} - {{record.name}} ({{record.time}})
         </div>
       </div>
     </div>
@@ -39,16 +46,21 @@
     data: () => {
       return {
         words: [
-          '동해물과 백두산이 마르고 닳도록',
-          '하느님이 보우하사 우리나라 만세',
-          '무궁화 삼천리 화려강산 대한사람',
-          '대한으로 길이 보전하세',
+          //'동해물과 백두산이 마르고 닳도록',
+          //'하느님이 보우하사 우리나라 만세',
+          //'무궁화 삼천리 화려강산 대한사람',
+          //'대한으로 길이 보전하세',
+          '가가',
+          '나나',
+          '다다',
+          '라라',
         ],
         currentIndex: 0,
         time: 0,
         t: null,
-        records: [], // {name, time}
+        records: [], // {name, time, current?}
         clear: true,
+        name: ''
       };
     },
     methods: {
@@ -70,13 +82,21 @@
       },
       saveDataAndReset() {
         this.records.push({
-          name: '입력받으세요.',
+          name: this.name.trim(),
           time: this.time / 10,
         });
+        this.records.sort((a,b)=> a.time - b.time);
         this.time = 0;
         this.currentIndex = 0;
-      }
-    }
+      },
+      ranking() {
+        if (this.time) {
+          const currentUser = {name: this.name.trim(), time: this.time / 10, current: true};
+          return [...this.records, currentUser].sort((a,b)=> a.time - b.time);
+        }
+        return this.records
+      },
+    },
   };
 </script>
 
@@ -99,6 +119,9 @@
       .records {
         border: 1px solid;
       }
+    }
+    .blue {
+      color: blue;
     }
   }
 </style>
