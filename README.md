@@ -1,4 +1,4 @@
-# typing
+# k-typing
 
 ## Project setup
 ```
