@@ -1,5 +1,5 @@
 <template>
-  <div id="app">
+  <div id="home">
     <div>
       <img alt="Vue logo" src="../assets/logo.png">
       <div>
@@ -27,7 +27,7 @@
       </div>
       <div class="box records">
         <h2>Records</h2>
-        <div :class="`record ${record.current ? 'blue' : ''}`" v-for="(record, idx) in ranking()">
+        <div :class="`record ${record.current ? 'blue' : ''}`" v-for="(record, idx) in ranking()" :key="idx">
           {{idx}} - {{record.name}} ({{record.time}})
         </div>
       </div>
@@ -36,73 +36,91 @@
 </template>
 
 <script>
-// @ is an alias to /src
-import Typing from '@/components/Typing.vue'
+  import { createNamespacedHelpers } from 'vuex';
+  import Typing from '@/components/Typing.vue';
 
-export default {
-  name: 'app',
-  components: {
-    Typing
-  },
-  data: () => {
-    return {
-      words: [
-        //'동해물과 백두산이 마르고 닳도록',
-        //'하느님이 보우하사 우리나라 만세',
-        //'무궁화 삼천리 화려강산 대한사람',
-        //'대한으로 길이 보전하세',
-        '가가',
-        '나나',
-        '다다',
-        '라라',
-      ],
-      currentIndex: 0,
-      time: 0,
-      t: null,
-      records: [], // {name, time, current?}
-      clear: true,
-      name: ''
-    };
-  },
-  methods: {
-    onSuccess(index) {
-      this.currentIndex = index + 1;
+  const { mapState, mapActions } = createNamespacedHelpers('home');
+
+  export default {
+    name: 'home',
+    components: {
+      Typing,
     },
-    timer() {
-      this.t = setInterval(() => this.time++, 100);
+    data: () => {
+      return {
+        words: [
+          //'동해물과 백두산이 마르고 닳도록',
+          //'하느님이 보우하사 우리나라 만세',
+          //'무궁화 삼천리 화려강산 대한사람',
+          //'대한으로 길이 보전하세',
+          '가가',
+          '나나',
+          '다다',
+          '라라',
+        ],
+        currentIndex: 0,
+        time: 0,
+        t: null,
+        records: [], // {name, time, current?}
+        clear: true,
+        //name: '',
+      };
     },
-    startTimer() {
-      if (this.time) return;
-      this.clear = false;
-      this.timer();
-    },
-    endTimer() {
-      clearInterval(this.t);
-      this.clear = true;
-      this.saveDataAndReset();
-    },
-    saveDataAndReset() {
-      this.records.push({
-        name: this.name.trim(),
-        time: this.time / 10,
-      });
-      this.records.sort((a,b)=> a.time - b.time);
-      this.time = 0;
-      this.currentIndex = 0;
-    },
-    ranking() {
-      if (this.time) {
-        const currentUser = {name: this.name.trim(), time: this.time / 10, current: true};
-        return [...this.records, currentUser].sort((a,b)=> a.time - b.time);
+    computed: {
+      ...mapState({
+        storeName: store => store.name,
+      }),
+      name: {
+        get() {
+          return this.storeName
+        },
+        set(v) {
+          this.setName(v);
+        }
       }
-      return this.records
     },
-  },
-};
+    methods: {
+      ...mapActions(['setName']),
+      onSuccess(index) {
+        this.currentIndex = index + 1;
+      },
+      timer() {
+        this.t = setInterval(() => this.time++, 100);
+      },
+      startTimer() {
+        if (this.time) {
+          return;
+        }
+        this.clear = false;
+        this.timer();
+      },
+      endTimer() {
+        clearInterval(this.t);
+        this.clear = true;
+        this.saveDataAndReset();
+      },
+      saveDataAndReset() {
+        this.records.push({
+          name: this.name.trim(),
+          time: this.time / 10,
+        });
+        this.records.sort((a, b) => a.time - b.time);
+        this.time = 0;
+        this.currentIndex = 0;
+      },
+      ranking() {
+        if (this.time) {
+          const currentUser = { name: this.name.trim(), time: this.time / 10, current: true };
+          return [ ...this.records, currentUser ].sort((a, b) => a.time - b.time);
+        }
+        return this.records;
+      },
+    },
+  };
 </script>
 
 <style lang="scss">
-  #app {
+  #home {
     font-family: 'Avenir', Helvetica, Arial, sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
