@@ -3,11 +3,7 @@
     <div>
       <img alt="Vue logo" src="../assets/logo.png">
       <div>
-        name:
-        <input
-          type="text"
-          v-model="name"
-        >
+        name: <input type="text" v-model="name"/>
       </div>
     </div>
     <div class="contents">
@@ -26,8 +22,8 @@
         />
       </div>
       <div class="box records">
-        <h2>Records</h2>
-        <div :class="`record ${record.current ? 'blue' : ''}`" v-for="(record, idx) in ranking()" :key="idx">
+        <h2>Ranking</h2>
+        <div v-for="(record, idx) in ranking()" :class="`record ${record.current ? 'blue' : ''}`" :key="record.time">
           {{idx}} - {{record.name}} ({{record.time}})
         </div>
       </div>
@@ -61,26 +57,25 @@
         currentIndex: 0,
         time: 0,
         t: null,
-        records: [], // {name, time, current?}
         clear: true,
-        //name: '',
       };
     },
     computed: {
+      ...mapState([ 'records' ]),
       ...mapState({
         storeName: store => store.name,
       }),
       name: {
         get() {
-          return this.storeName
+          return this.storeName;
         },
         set(v) {
           this.setName(v);
-        }
-      }
+        },
+      },
     },
     methods: {
-      ...mapActions(['setName']),
+      ...mapActions([ 'setName', 'setRecords' ]),
       onSuccess(index) {
         this.currentIndex = index + 1;
       },
@@ -100,11 +95,10 @@
         this.saveDataAndReset();
       },
       saveDataAndReset() {
-        this.records.push({
+        this.setRecords({
           name: this.name.trim(),
           time: this.time / 10,
         });
-        this.records.sort((a, b) => a.time - b.time);
         this.time = 0;
         this.currentIndex = 0;
       },
