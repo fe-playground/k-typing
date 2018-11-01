@@ -34,6 +34,7 @@
 <script>
   import { createNamespacedHelpers } from 'vuex';
   import Typing from '@/components/Typing.vue';
+  import words from '@/assets/words';
 
   const { mapState, mapActions } = createNamespacedHelpers('home');
 
@@ -44,16 +45,7 @@
     },
     data: () => {
       return {
-        words: [
-          //'동해물과 백두산이 마르고 닳도록',
-          //'하느님이 보우하사 우리나라 만세',
-          //'무궁화 삼천리 화려강산 대한사람',
-          //'대한으로 길이 보전하세',
-          '가가',
-          '나나',
-          '다다',
-          '라라',
-        ],
+        words,
         currentIndex: 0,
         time: 0,
         t: null,
