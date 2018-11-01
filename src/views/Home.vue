@@ -21,11 +21,8 @@
           :clear="clear"
         />
       </div>
-      <div class="box records">
-        <h2>Ranking</h2>
-        <div v-for="(record, idx) in ranking()" :class="`record ${record.current ? 'blue' : ''}`" :key="record.time">
-          {{idx}} - {{record.name}} ({{record.time}})
-        </div>
+      <div class="box">
+        <Ranking :records="records" :current-user="currentUser"/>
       </div>
     </div>
   </div>
@@ -34,6 +31,7 @@
 <script>
   import { createNamespacedHelpers } from 'vuex';
   import Typing from '@/components/Typing.vue';
+  import Ranking from '@/components/Ranking';
   import words from '@/assets/words';
 
   const { mapState, mapActions } = createNamespacedHelpers('home');
@@ -42,16 +40,15 @@
     name: 'home',
     components: {
       Typing,
+      Ranking,
     },
-    data: () => {
-      return {
-        words,
-        currentIndex: 0,
-        time: 0,
-        t: null,
-        clear: true,
-      };
-    },
+    data: () => ({
+      words,
+      currentIndex: 0,
+      time: 0,
+      t: null,
+      clear: true,
+    }),
     computed: {
       ...mapState([ 'records' ]),
       ...mapState({
@@ -64,6 +61,10 @@
         set(v) {
           this.setName(v);
         },
+      },
+      currentUser() {
+        if (!this.time) return;
+        return { id: -1, name: this.name.trim(), time: this.time / 10, current: true };
       },
     },
     methods: {
@@ -94,13 +95,6 @@
         this.time = 0;
         this.currentIndex = 0;
       },
-      ranking() {
-        if (this.time) {
-          const currentUser = { name: this.name.trim(), time: this.time / 10, current: true };
-          return [ ...this.records, currentUser ].sort((a, b) => a.time - b.time);
-        }
-        return this.records;
-      },
     },
   };
 </script>
@@ -120,13 +114,10 @@
         min-height: 300px;
         vertical-align: top;
         box-sizing: border-box;
-      }
-      .records {
         border: 1px solid;
+        margin-top: 10px;
+        padding: 10px;
       }
-    }
-    .blue {
-      color: blue;
     }
   }
 </style>
