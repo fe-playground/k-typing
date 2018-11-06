@@ -1,15 +1,11 @@
 <template>
-  <div class="typing">
-    <div class="view-line">{{ text }}</div>
-    <input
-        class="editor"
-        type="text"
-        v-model="editor"
-        :disabled="!active"
-        ref="editorInput"
-        :autofocus="active"
-    />
-  </div>
+  <v-text-field
+      :label="text"
+      v-model="editor"
+      :disabled="!active"
+      :autofocus="active"
+      ref="editorInput"
+  ></v-text-field>
 </template>
 
 <script>

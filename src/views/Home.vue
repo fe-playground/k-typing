@@ -1,30 +1,25 @@
 <template>
   <div id="home">
+      <v-text-field v-model="name" autofocus>
+        <template slot="label">
+          <img alt="Vue logo" src="../assets/logo.png" style="width: 20px;"> <strong>Name</strong>
+        </template>
+      </v-text-field>
     <div>
-      <img alt="Vue logo" src="../assets/logo.png">
-      <div>
-        name: <input type="text" v-model="name"/>
-      </div>
+      <h2>{{time / 10}}</h2>
+      <Typing
+        v-for="(w, i) in words"
+        :text="w"
+        :index="i"
+        :onSuccess="onSuccess"
+        :active="currentIndex === i"
+        :onStartTimer="startTimer"
+        :onEndTimer="endTimer"
+        :isLast="words.length === i + 1"
+        :clear="clear"
+      />
     </div>
-    <div class="contents">
-      <div class="box">
-        <h2>{{time / 10}}</h2>
-        <Typing
-          v-for="(w, i) in words"
-          :text="w"
-          :index="i"
-          :onSuccess="onSuccess"
-          :active="currentIndex === i"
-          :onStartTimer="startTimer"
-          :onEndTimer="endTimer"
-          :isLast="words.length === i + 1"
-          :clear="clear"
-        />
-      </div>
-      <div class="box">
-        <Ranking :records="records" :current-user="currentUser"/>
-      </div>
-    </div>
+    <Ranking :records="records" :current-user="currentUser"/>
   </div>
 </template>
 
@@ -107,17 +102,5 @@
     text-align: center;
     color: #2c3e50;
     margin-top: 60px;
-    .contents {
-      .box {
-        display: inline-block;
-        width: 50%;
-        min-height: 300px;
-        vertical-align: top;
-        box-sizing: border-box;
-        border: 1px solid;
-        margin-top: 10px;
-        padding: 10px;
-      }
-    }
   }
 </style>
