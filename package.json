@@ -2,7 +2,7 @@
   "name": "k-typing",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://fe-playground.github.io/k-typing/",
+  "homepage": "https://1004w455.github.io/k-typing/",
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
