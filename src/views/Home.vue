@@ -43,6 +43,7 @@
       time: 0,
       t: null,
       clear: true,
+      toast: true
     }),
     computed: {
       ...mapState([ 'records' ]),
@@ -55,6 +56,8 @@
         },
         set(v) {
           this.setName(v);
+          this.$bus.$emit('toast', v)
+          //this.$parent.$parent.$parent.$emit('toast', v)
         },
       },
       currentUser() {

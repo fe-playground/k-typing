@@ -8,12 +8,34 @@
           <router-link to="/">Home</router-link> |
           <router-link to="/about">About</router-link>
         </div>
+        <v-snackbar v-model="toast" :top="true">
+          {{toastMessage}}
+        </v-snackbar>
         <router-view></router-view>
       </v-container>
     </v-content>
     <v-footer app></v-footer>
   </v-app>
 </template>
+
+<script>
+  export default {
+    name: 'app',
+    data: () => ({
+      toast: false,
+      toastMessage: ''
+    }),
+    created() {
+      this.$bus.$on('toast', this.onToast)
+    },
+    methods: {
+      onToast(message) {
+        this.toast = true;
+        this.toastMessage = message;
+      }
+    }
+  }
+</script>
 
 <style lang="scss">
   #app {
