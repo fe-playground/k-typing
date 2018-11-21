@@ -1,24 +1,35 @@
 import Vue from 'vue';
 import Router from 'vue-router';
+import store from '@/store';
+
 import Login from './views/Login';
-//import Home from './views/Home.vue';
+import NotFound404 from './views/NotFound404';
 
 Vue.use(Router);
 
-const NotFound = { template: '<p>Page not found</p>' };
-
-export default new Router({
+const router = new Router({
   //mode: 'history',
   routes: [
     {
+      path: '*',
+      component: NotFound404,
+      meta: { title: '404' },
+    },
+    {
       path: '/',
+      redirect: '/login',
+    },
+    {
+      path: '/login',
       name: 'login',
       component: Login,
+      meta: { title: 'Login' },
     },
     {
       path: '/home',
       name: 'home',
       component: () => import('./views/Home.vue'),
+      meta: { requiresAuth: true, title: 'home' },
     },
     {
       path: '/about',
@@ -27,11 +38,25 @@ export default new Router({
       // this generates a separate chunk (about.[hash].js) for this route
       // which is lazy-loaded when the route is visited.
       component: () => import(/* webpackChunkName: "about" */ './views/About.vue'),
-    },
-    {
-      path: '*',
-      //name: 'notFound',
-      component: Login,
+      meta: { title: 'about' },
     },
   ],
 });
+
+router.beforeEach((to, from, next) => {
+  document.title = to.meta.title || 'typing';
+  if (to.matched.some(record => record.meta.requiresAuth)) {
+    if (!store.getters[ 'auth/isAuth' ]) {
+      next({
+        path: '/login',
+        query: { redirect: to.fullPath },
+      });
+    } else {
+      next();
+    }
+  } else {
+    next(); // 반드시 next()를 호출하십시오!
+  }
+});
+
+export default router;

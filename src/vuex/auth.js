@@ -5,6 +5,12 @@ const state = {
   token: '',
 };
 
+const getters = {
+  isAuth(state, rootState, 나머지는모르겠다) {
+    return !!state.token;
+  },
+};
+
 const mutations = {
   setAuthInfo(state, payload) {
     state.email = payload.email;
@@ -23,5 +29,5 @@ const actions = {
   },
 };
 
-const auth = { state, mutations, actions, namespaced: true };
+const auth = { state, getters, mutations, actions, namespaced: true };
 export default auth;
