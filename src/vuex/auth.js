@@ -1,5 +1,3 @@
-import router from '@/router';
-
 const state = {
   email: '',
   token: '',
@@ -25,7 +23,8 @@ const actions = {
       email: payload,
       token: new Date().getTime(),
     });
-    router.push('/home');
+    const redirect = rootGetters.router.currentRoute.query.redirect;
+    rootGetters.router.push(redirect || '/home');
   },
 };
 

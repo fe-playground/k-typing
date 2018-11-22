@@ -4,8 +4,9 @@
       <v-card ref="form">
         <v-card-text>
           <form>
+              <!--v-validate="'required|email'"-->
             <v-text-field
-              v-validate="'required|email'"
+              v-validate="'required'"
               v-model="email"
               :error-messages="errors.collect('email')"
               label="E-mail"
@@ -73,7 +74,6 @@
       submit() {
         this.$validator.validateAll()
           .then((success) => {
-            console.log(1111, success);
             if(!success) return;
             this.login(this.email);
           });
