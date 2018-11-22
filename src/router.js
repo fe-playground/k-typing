@@ -29,7 +29,19 @@ const router = new Router({
       path: '/home',
       name: 'home',
       component: () => import('./views/Home.vue'),
-      meta: { requiresAuth: true, title: 'home' },
+      meta: { title: 'Home', requiresAuth: true },
+    },
+    {
+      path: '/boards',
+      name: 'boards',
+      component: () => import('./views/Boards'),
+      meta: { title: 'Boards', requiresAuth: true },
+    },
+    {
+      path: '/boards/:id',
+      name: 'board',
+      component: () => import('./views/Board'),
+      meta: { title: 'Board', requiresAuth: true },
     },
     {
       path: '/public',

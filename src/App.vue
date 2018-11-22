@@ -7,7 +7,8 @@
         <div id="nav">
           <router-link to="/login">Login</router-link> |
           <router-link to="/home">Home</router-link> |
-          <router-link to="/about">About</router-link>
+          <router-link to="/boards">Boards</router-link> |
+          <router-link to="/public">Public</router-link>
         </div>
         <v-snackbar v-model="toast" :top="true">
           {{toastMessage}}
